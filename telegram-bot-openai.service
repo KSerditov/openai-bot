@@ -1,0 +1,19 @@
+[Unit]
+Description=Telegram Bot for OpenAI API
+
+[Service]
+WorkingDirectory=/opt/telegram-bot-openai
+ExecStart=/usr/bin/dotnet /opt/telegram-bot-openai/Telegram-bot-openai.dll
+Restart=always
+# Restart service after 10 seconds if dotnet service crashes
+RestartSec=10
+KillSignal=SIGINT
+SyslogIdentifier=telegram-bot-openai
+User=telegram-bot-openai
+Group=telegram-bot-openai
+Environment=ASPNETCORE_ENVIRONMENT=Production
+Environment=OPENAI_KEY=sk-7M8<...>DUIRO64
+Environment=OPENAI_TG_BOT=7111936<...>7H_v0KZE
+
+[Install]
+WantedBy=multi-user.target
