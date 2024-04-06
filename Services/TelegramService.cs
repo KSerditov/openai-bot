@@ -47,14 +47,15 @@ public class TelegramService : BackgroundService
 
     private async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
+        string strUpdate = JsonConvert.SerializeObject(update);
+        _logger.LogInformation($"Received update: '{strUpdate}'");
+
         if (update.Message is not { } message)
             return;
         if (message.Text is not { } messageText)
             return;
 
         long chatId = message.Chat.Id;
-
-        _logger.LogInformation($"Received update: '{update}'", JsonConvert.SerializeObject(update, Formatting.Indented));
 
         if (!messageText.ToLower().StartsWith(@"/gpt "))
         {
