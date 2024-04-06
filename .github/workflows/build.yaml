@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     if: github.event.pull_request.merged == true
 
     steps:
@@ -21,12 +21,12 @@ jobs:
 
       - name: Publish Projects
         run: |
-          $runtimes = "linux-x64"
-          $project = "./Telegram-bot-openai.csproj"
-          foreach ($runtime in $runtimes) {
+          runtimes = "linux-x64"
+          project = "./Telegram-bot-openai.csproj"
+          for runtime in $runtimes; do
             dotnet publish $project /p:DebugType=None /p:DebugSymbols=false -c Release -r $runtime -o "./ProductionBuild/$runtime" --self-contained false
-          }
-        shell: pwsh
+          done
+        shell: bash
 
       - name: Commit and Push Changes
         run: |
@@ -36,3 +36,23 @@ jobs:
           git commit -m "Automated build commit" --allow-empty
           git push origin HEAD:${{ github.ref_name }}
         shell: bash
+
+      - name: Transfer Build to Server
+        run: |
+          scp -P ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no -r ./ProductionBuild/linux-x64/* ${{ secrets.SSH_USER }}@${{ secrets.SSH_SERVER }}:/opt/telegram-bot-openai/
+        shell: bash
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_SERVER: ${{ secrets.SSH_SERVER }}
+
+      - name: Restart Telegram Bot Service
+        run: |
+          ssh -p ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_SERVER }} 'sudo systemctl restart telegram-bot-openai.service'
+        shell: bash
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_SERVER: ${{ secrets.SSH_SERVER }}
