@@ -54,7 +54,7 @@ public class TelegramService : BackgroundService
 
         long chatId = message.Chat.Id;
 
-        _logger.LogInformation($"Received update: '{update}'", JsonConvert.SerializeObject(update));
+        _logger.LogInformation($"Received update: '{update}'", JsonConvert.SerializeObject(update, Formatting.Indented));
 
         if (!messageText.ToLower().StartsWith(@"/gpt "))
         {
