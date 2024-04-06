@@ -2,7 +2,7 @@ name: Build and Push To Prod
 
 on:
   pull_request:
-    branches: [ master ]
+    branches: [master]
     types: [closed]
 
 jobs:
@@ -11,28 +11,28 @@ jobs:
     if: github.event.pull_request.merged == true
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '7.0.x'
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: "7.0.x"
 
-    - name: Publish Projects
-      run: |
-        $runtimes = "linux-x64"
-        $project = "./Telegram-bot-openai.csproj"
-        foreach ($runtime in $runtimes) {
-          dotnet publish $project /p:DebugType=None /p:DebugSymbols=false -c Release -r $runtime -o "./Release/$runtime" --self-contained false
-        }
-      shell: pwsh
+      - name: Publish Projects
+        run: |
+          $runtimes = "linux-x64"
+          $project = "./Telegram-bot-openai.csproj"
+          foreach ($runtime in $runtimes) {
+            dotnet publish $project /p:DebugType=None /p:DebugSymbols=false -c Release -r $runtime -o "./Release/$runtime" --self-contained false
+          }
+        shell: pwsh
 
-    - name: Commit and Push Changes
-      run: |
-        git config --global user.name 'github-actions[bot]'
-        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-        git add ./Release/linux-x64/*
-        git commit -m "Automated build commit" --allow-empty
-        git push origin HEAD:${{ github.ref_name }}
-      shell: bash
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add ./Release/linux-x64/*
+          git commit -m "Automated build commit" --allow-empty
+          git push origin HEAD:${{ github.ref_name }}
+        shell: bash
