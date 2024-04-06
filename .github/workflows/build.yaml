@@ -24,7 +24,7 @@ jobs:
           $runtimes = "linux-x64"
           $project = "./Telegram-bot-openai.csproj"
           foreach ($runtime in $runtimes) {
-            dotnet publish $project /p:DebugType=None /p:DebugSymbols=false -c Release -r $runtime -o "./Release/$runtime" --self-contained false
+            dotnet publish $project /p:DebugType=None /p:DebugSymbols=false -c Release -r $runtime -o "./ProductionBuild/$runtime" --self-contained false
           }
         shell: pwsh
 
@@ -32,7 +32,7 @@ jobs:
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add ./Release/linux-x64/*
+          git add ./ProductionBuild/linux-x64/*
           git commit -m "Automated build commit" --allow-empty
           git push origin HEAD:${{ github.ref_name }}
         shell: bash
