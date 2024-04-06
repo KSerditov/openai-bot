@@ -2,6 +2,7 @@ namespace KSerditov.TgBot.Openai;
 
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Telegram.Bot;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Polling;
@@ -46,8 +47,6 @@ public class TelegramService : BackgroundService
 
     private async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Received Telegram update.");
-
         if (update.Message is not { } message)
             return;
         if (message.Text is not { } messageText)
@@ -55,7 +54,7 @@ public class TelegramService : BackgroundService
 
         long chatId = message.Chat.Id;
 
-        _logger.LogInformation($"Received a '{messageText}' message in chat {chatId}.");
+        _logger.LogInformation($"Received update: '{update}'", JsonConvert.SerializeObject(update));
 
         if (!messageText.ToLower().StartsWith(@"/gpt "))
         {
