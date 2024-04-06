@@ -21,9 +21,9 @@ jobs:
 
       - name: Publish Projects
         run: |
-          runtimes = "linux-x64"
-          project = "./Telegram-bot-openai.csproj"
-          for runtime in $runtimes; do
+          project="./Telegram-bot-openai.csproj"
+          runtimes=("linux-x64")
+          for runtime in "${runtimes[@]}"; do
             dotnet publish $project /p:DebugType=None /p:DebugSymbols=false -c Release -r $runtime -o "./ProductionBuild/$runtime" --self-contained false
           done
         shell: bash
