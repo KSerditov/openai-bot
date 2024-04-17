@@ -31,6 +31,11 @@ class Program
             .UseSerilog()
             .ConfigureServices((hostContext, services) =>
             {
+                services.AddHttpClient("TelegramBotClient", client =>
+                    {
+                        client.BaseAddress = new Uri("https://api.telegram.org");
+                        client.Timeout = TimeSpan.FromSeconds(15);
+                    });
                 services.AddHostedService<TelegramService>();
                 services.AddSingleton<IOpenAIService, OpenAIService>();
             });
