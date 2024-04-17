@@ -34,7 +34,7 @@ class Program
                 services.AddHttpClient("TelegramBotClient", client =>
                     {
                         client.BaseAddress = new Uri("https://api.telegram.org");
-                        client.Timeout = TimeSpan.FromSeconds(15);
+                        client.Timeout = TimeSpan.FromSeconds(60);
                     });
                 services.AddHostedService<TelegramService>();
                 services.AddSingleton<IOpenAIService, OpenAIService>();
