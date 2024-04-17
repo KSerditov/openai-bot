@@ -66,17 +66,7 @@ public class TelegramService : BackgroundService
         if (update.Message.From?.Id == botClient.BotId)
             return;
 
-
         long chatId = message.Chat.Id;
-
-        /*
-        if (!messageText.ToLower().StartsWith(@"/gpt "))
-        {
-            return;
-        }
-        */
-
-        string prompt = messageText.Substring(@"/gpt ".Length);
 
         Message? awaitMessageId = await SendTgMessageAsync(
             botClient,
@@ -89,7 +79,7 @@ public class TelegramService : BackgroundService
         string completion;
         try
         {
-            completion = await _chatgpt.GetChatCompletion(prompt);
+            completion = await _chatgpt.GetChatCompletion(messageText);
         }
         catch (Exception ex)
         {
