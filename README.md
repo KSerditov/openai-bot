@@ -21,3 +21,7 @@ Ensure to set up the OpenAI API key and the Telegram bot key in the service conf
 Here's how you can interact with the bot:
 
 ![image](https://github.com/KSerditov/openai-bot/assets/3009597/8b8488fe-fd35-4e76-b3e0-371bc13e71fd)
+
+
+## Continuous Integration and Deployment
+The repository includes a basic CI/CD pipeline using GitHub Actions. It builds the application and deploys it to a remote server whenever changes are merged into the main branch.
