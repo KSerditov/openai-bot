@@ -19,7 +19,7 @@ public class OpenAIService : IOpenAIService
     public async Task<string> GetChatCompletion(string prompt)
     {
         OpenAI_API.Chat.Conversation chat = _api.Chat.CreateConversation();
-        chat.Model = Model.GPT4;
+        chat.Model = new Model("gpt-4o");
         chat.RequestParameters.Temperature = 0;
 
         chat.AppendUserInput(prompt);
